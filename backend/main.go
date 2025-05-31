@@ -1,6 +1,8 @@
 package main
 
 import (
+	"react-go-practice/api/handler"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,12 +21,17 @@ func main() {
 		c.Next()
 	})
 
-	// テスト用のエンドポイント
+	// ハンドラーの初期化
+	randomHandler := handler.NewRandomHandler()
+
+	// ルーティングの設定
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
+	r.GET("/api/random", randomHandler.GetRandom)
 
+	// 8080ポートで起動
 	r.Run(":8080")
 }
