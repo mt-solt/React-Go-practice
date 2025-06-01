@@ -3,12 +3,9 @@ package random
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"time"
 
 	"react-go-practice/models"
-
-	"github.com/google/uuid"
 )
 
 type postgresRepo struct {
@@ -23,6 +20,19 @@ type randomColumn struct {
 }
 
 func (r *postgresRepo) Create(ctx context.Context, data models.Random) error {
+	// タイムスタンプ生成
+	now := time.Now()
+
+	// DB登録用の構造体作成
+	ins := randomColumn{
+		id:         data.UUID,
+		random:     data.Value,
+		user_id:    data.UserID,
+		created_at: now.String(),
+		updated_at: now.String(),
+	}
+	// TODO: INSERT
+	fmt.Printf("%+v\n", ins)
 	return nil
 }
 
@@ -37,27 +47,6 @@ func (r *postgresRepo) Read(ctx context.Context, id int) (models.Random, error) 
 }
 
 func (r *postgresRepo) Update(ctx context.Context, id int, random int64) error {
-	// タイムスタンプ生成
-	now := time.Now()
-
-	// UUID生成
-	uuidObj, err := uuid.NewRandom()
-	if err != nil {
-		return err
-	}
-	uuid := uuidObj.String()
-
-	// DB登録用の構造体作成
-	data := randomColumn{
-		id:         uuid,
-		random:     random,
-		user_id:    strconv.Itoa(id),
-		created_at: now.String(),
-		updated_at: now.String(),
-	}
-	// TODO: INSERT
-	fmt.Printf("%+v\n", data)
-
 	return nil
 }
 

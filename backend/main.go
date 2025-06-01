@@ -31,6 +31,7 @@ func main() {
 		})
 	})
 	r.GET("/api/random", randomHandler.GetRandom)
+	r.POST("/api/create_random", randomHandler.CreateRundom)
 
 	// 8080ポートで起動
 	r.Run(":8080")

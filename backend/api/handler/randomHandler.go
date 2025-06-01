@@ -4,8 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 
+	"react-go-practice/models"
 	"react-go-practice/repository/random"
+	randomService "react-go-practice/services/random"
 )
 
 type RandomHandler struct {
@@ -16,7 +19,7 @@ func NewRandomHandler() *RandomHandler {
 	return &RandomHandler{}
 }
 
-// 乱数取得ハンドラ
+// 乱数全取得
 func (h *RandomHandler) GetRandom(c *gin.Context) {
 	// TODO: データベースからランダムなデータを取得する処理を実装
 	repo := h.randomRepoFactory.Create()
@@ -29,4 +32,49 @@ func (h *RandomHandler) GetRandom(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": randoms,
 	})
+}
+
+// 乱数生成・登録
+func (h *RandomHandler) CreateRundom(c *gin.Context) {
+	// リクエストボディからユーザーIDを取得
+	var requestBody struct {
+		UserID string `json:"userId"`
+	}
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	repo := h.randomRepoFactory.Create()
+
+	// 乱数生成
+	randomGen := randomService.NewRandomGenerator()
+	random := randomGen.Generate()
+
+	// 乱数データのID
+	uuidObj, err := uuid.NewRandom()
+	if err != nil {
+		// サーバエラー
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	uuid := uuidObj.String()
+
+	// 乱数モデル生成
+	data := models.Random{
+		UserID: requestBody.UserID,
+		Value:  random,
+		UUID:   uuid,
+	}
+
+	err = repo.Create(c, data)
+
+	if err != nil {
+		// サーバエラー
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 処理成功
+	c.JSON(http.StatusOK, gin.H{})
 }
