@@ -8,9 +8,9 @@ import (
 
 type RandomRepository interface {
 	Create(ctx context.Context, data models.Random) error
-	Read(ctx context.Context, id int) (models.Random, error)
-	Update(ctx context.Context, id int, random int64) error
-	Delete(ctx context.Context, id int) error
+	Read(ctx context.Context, uuid string) (models.Random, error)
+	Update(ctx context.Context, uuid string, random int64) error
+	Delete(ctx context.Context, uuid string) error
 	GetAll(ctx context.Context) ([]models.Random, error)
-	QueryByUser(ctx context.Context, id int) ([]models.Random, error)
+	QueryByUser(ctx context.Context, userId string) ([]models.Random, error)
 }

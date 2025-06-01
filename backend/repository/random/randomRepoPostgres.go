@@ -36,7 +36,7 @@ func (r *postgresRepo) Create(ctx context.Context, data models.Random) error {
 	return nil
 }
 
-func (r *postgresRepo) Read(ctx context.Context, id int) (models.Random, error) {
+func (r *postgresRepo) Read(ctx context.Context, uuid string) (models.Random, error) {
 	// TODO: データベースからデータを取得する処理を実装
 	tmp := models.Random{
 		UUID:   "1234567890",
@@ -46,11 +46,11 @@ func (r *postgresRepo) Read(ctx context.Context, id int) (models.Random, error) 
 	return tmp, nil
 }
 
-func (r *postgresRepo) Update(ctx context.Context, id int, random int64) error {
+func (r *postgresRepo) Update(ctx context.Context, uuid string, random int64) error {
 	return nil
 }
 
-func (r *postgresRepo) Delete(ctx context.Context, id int) error {
+func (r *postgresRepo) Delete(ctx context.Context, uuid string) error {
 	// TODO: DELETE
 	return nil
 }
@@ -59,6 +59,6 @@ func (r *postgresRepo) GetAll(ctx context.Context) ([]models.Random, error) {
 	return nil, nil
 }
 
-func (r *postgresRepo) QueryByUser(ctx context.Context, id int) ([]models.Random, error) {
+func (r *postgresRepo) QueryByUser(ctx context.Context, userId string) ([]models.Random, error) {
 	return nil, nil
 }
