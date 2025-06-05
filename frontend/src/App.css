@@ -40,3 +40,65 @@
 .read-the-docs {
   color: #888;
 }
+
+.random-numbers-section {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.random-numbers-section h2 {
+  margin-bottom: 1rem;
+  color: #213547;
+}
+
+.random-numbers-section button {
+  margin-bottom: 1rem;
+  padding: 0.6em 1.2em;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.random-numbers-section button:hover {
+  background-color: #535bf2;
+}
+
+.random-numbers-section button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.random-numbers-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.random-numbers-section th,
+.random-numbers-section td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.random-numbers-section th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.random-numbers-section tr:hover {
+  background-color: #f8f8f8;
+}
+
+.error {
+  color: #ff4444;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background-color: #ffeeee;
+  border-radius: 4px;
+}
