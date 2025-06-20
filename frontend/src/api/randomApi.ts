@@ -1,13 +1,15 @@
 import type { RandomNumber, CreateRandomRequest, UpdateRandomRequest, DeleteRandomRequest } from '../types/random'
 
-const API_BASE_URL = 'http://localhost:8080/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export const fetchRandomNumbers = async (): Promise<RandomNumber[]> => {
   const response = await fetch(`${API_BASE_URL}/random`)
   if (!response.ok) {
     throw new Error('APIリクエストに失敗しました')
   }
-  return response.json()
+
+  const resJson = await response.json()
+  return resJson.data
 }
 
 // ユーザIDをキーに乱数を取得
@@ -16,6 +18,7 @@ export const fetchRandomByUser = async (userId: string): Promise<RandomNumber[]>
   if (!response.ok) {
     throw new Error('APIリクエストに失敗しました')
   }
+
   return response.json()
 }
 

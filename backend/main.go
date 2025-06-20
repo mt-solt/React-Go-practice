@@ -2,16 +2,21 @@ package main
 
 import (
 	"react-go-practice/api/handler"
+	randomRepo "react-go-practice/repository/random"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	f := randomRepo.New()
+	repo := f.Create()
+	randomHandler := handler.NewRandomHandler(repo)
+
 	r := gin.Default()
 
 	// CORSミドルウェアの設定
 	r.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		if c.Request.Method == "OPTIONS" {
@@ -20,9 +25,6 @@ func main() {
 		}
 		c.Next()
 	})
-
-	// ハンドラーの初期化
-	randomHandler := handler.NewRandomHandler()
 
 	// ルーティングの設定
 	r.GET("/ping", func(c *gin.Context) {

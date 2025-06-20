@@ -7,23 +7,23 @@ import (
 	"github.com/google/uuid"
 
 	"react-go-practice/models"
-	"react-go-practice/repository/random"
+	randomRepo "react-go-practice/repository/random"
 	randomService "react-go-practice/services/random"
 )
 
 type RandomHandler struct {
-	randomRepoFactory random.RandomRepoFactory
+	repo randomRepo.RandomRepository
 }
 
-func NewRandomHandler() *RandomHandler {
-	return &RandomHandler{}
+func NewRandomHandler(repo randomRepo.RandomRepository) *RandomHandler {
+	return &RandomHandler{
+		repo: repo,
+	}
 }
 
 // 乱数全取得
 func (h *RandomHandler) GetRandom(c *gin.Context) {
-	// TODO: データベースからランダムなデータを取得する処理を実装
-	repo := h.randomRepoFactory.Create()
-	randoms, err := repo.GetAll(c)
+	randoms, err := h.repo.GetAll(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -44,8 +44,7 @@ func (h *RandomHandler) GetRandomByUser(c *gin.Context) {
 	}
 
 	// ユーザーIDに紐づく乱数を取得
-	repo := h.randomRepoFactory.Create()
-	randoms, err := repo.QueryByUser(c, userId)
+	randoms, err := h.repo.QueryByUser(c, userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -74,9 +73,6 @@ func (h *RandomHandler) CreateRundom(c *gin.Context) {
 		return
 	}
 
-	repo := h.randomRepoFactory.Create()
-
-	// 乱数生成
 	randomGen := randomService.NewRandomGenerator()
 	random := randomGen.Generate()
 
@@ -96,7 +92,7 @@ func (h *RandomHandler) CreateRundom(c *gin.Context) {
 		UUID:   uuid,
 	}
 
-	err = repo.Create(c, data)
+	err = h.repo.Create(c, data)
 
 	if err != nil {
 		// サーバエラー
@@ -124,8 +120,7 @@ func (h *RandomHandler) UpdateRandom(c *gin.Context) {
 	random := randomGen.Generate()
 
 	// 更新
-	repo := h.randomRepoFactory.Create()
-	err := repo.Update(c, requestBody.Uuid, random)
+	err := h.repo.Update(c, requestBody.Uuid, random)
 	if err != nil {
 		// サーバエラー
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -148,8 +143,7 @@ func (h *RandomHandler) DeleteRandom(c *gin.Context) {
 	}
 
 	// 削除
-	repo := h.randomRepoFactory.Create()
-	err := repo.Delete(c, requestBody.Uuid)
+	err := h.repo.Delete(c, requestBody.Uuid)
 	if err != nil {
 		// サーバエラー
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

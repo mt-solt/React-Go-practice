@@ -102,3 +102,30 @@
   background-color: #ffeeee;
   border-radius: 4px;
 }
+
+@media (prefers-color-scheme: dark) {
+  .random-numbers-section {
+    background: #222;
+    color: #fff;
+  }
+  .random-numbers-section h2 {
+    color: #fff;
+  }
+  .random-numbers-section table {
+    background: #333;
+    color: #fff;
+  }
+  .random-numbers-section th {
+    background-color: #222b3a;
+    color: #fff;
+  }
+  .random-numbers-section td {
+    color: #fff;
+  }
+  .random-numbers-section tr:hover {
+    background-color: #204080;
+  }
+  .random-numbers-section .error {
+    color: #ffb3b3;
+  }
+}
