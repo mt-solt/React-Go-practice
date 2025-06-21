@@ -52,7 +52,7 @@ func (h *RandomHandler) GetRandomByUser(c *gin.Context) {
 
 	// 1件もデータがない場合
 	if len(randoms) == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": "No random numbers found for this user"})
 		return
 	}
 
