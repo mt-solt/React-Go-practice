@@ -1,7 +1,7 @@
 export interface RandomNumber {
   uuid: string
   value: number
-  created_at: string
+  user_id: string
 }
 
 export interface CreateRandomRequest {
@@ -10,7 +10,6 @@ export interface CreateRandomRequest {
 
 export interface UpdateRandomRequest {
   id: string
-  value: number
 }
 
 export interface DeleteRandomRequest {

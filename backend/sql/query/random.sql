@@ -19,10 +19,10 @@ WHERE id = $1;
 -- name: GetAllRandoms :many
 SELECT id, random_val, user_id, created_at, updated_at
 FROM random
-ORDER BY created_at DESC;
+ORDER BY id ASC;
 
 -- name: GetRandomsByUser :many
 SELECT id, random_val, user_id, created_at, updated_at
 FROM random
 WHERE user_id = $1
-ORDER BY created_at DESC; 
+ORDER BY id ASC; 

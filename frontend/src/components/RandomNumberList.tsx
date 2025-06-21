@@ -6,7 +6,8 @@ export const RandomNumberList = () => {
     loading,
     error,
     loadRandomNumbers,
-    handleCreateRandom
+    handleCreateRandom,
+    handleUpdateRandom
   } = useRandomNumbers()
 
   return (
@@ -29,7 +30,7 @@ export const RandomNumberList = () => {
             <tr>
               <th>ID</th>
               <th>値</th>
-              <th>作成日時</th>
+              <th>更新</th>
             </tr>
           </thead>
           <tbody>
@@ -37,7 +38,14 @@ export const RandomNumberList = () => {
               <tr key={random.uuid}>
                 <td>{random.uuid}</td>
                 <td>{random.value}</td>
-                <td>{new Date(random.created_at).toLocaleString()}</td>
+                <td>
+                  <button 
+                    onClick={() => handleUpdateRandom(random.uuid)}
+                    disabled={loading}
+                  >
+                    {loading ? '更新中...' : '更新'}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
