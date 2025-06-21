@@ -1,35 +1,25 @@
-import { useState, useEffect } from 'react'
-import type { RandomNumber } from '../types/random'
-import { fetchRandomNumbers } from '../api/randomApi'
+import { useRandomNumbers } from '../hooks/useRandomNumbers'
 
 export const RandomNumberList = () => {
-  const [randomNumbers, setRandomNumbers] = useState<RandomNumber[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const loadRandomNumbers = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const data = await fetchRandomNumbers()
-      setRandomNumbers(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'エラーが発生しました')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    loadRandomNumbers()
-  }, [])
+  const {
+    randomNumbers,
+    loading,
+    error,
+    loadRandomNumbers,
+    handleCreateRandom
+  } = useRandomNumbers()
 
   return (
     <div className="random-numbers-section">
       <h2>乱数一覧</h2>
-      <button onClick={loadRandomNumbers} disabled={loading}>
-        {loading ? '読み込み中...' : '乱数を取得'}
-      </button>
+      <div className="button-group">
+        <button onClick={loadRandomNumbers} disabled={loading}>
+          {loading ? '読み込み中...' : '乱数を取得'}
+        </button>
+        <button onClick={handleCreateRandom} disabled={loading}>
+          {loading ? '登録中...' : '乱数を登録'}
+        </button>
+      </div>
       
       {error && <p className="error">{error}</p>}
       

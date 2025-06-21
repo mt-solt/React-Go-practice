@@ -5,7 +5,7 @@ export interface RandomNumber {
 }
 
 export interface CreateRandomRequest {
-  value: number
+  userId: string
 }
 
 export interface UpdateRandomRequest {
