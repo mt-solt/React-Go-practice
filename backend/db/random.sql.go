@@ -49,7 +49,7 @@ func (q *Queries) DeleteRandom(ctx context.Context, id uuid.UUID) error {
 const getAllRandoms = `-- name: GetAllRandoms :many
 SELECT id, random_val, user_id, created_at, updated_at
 FROM random
-ORDER BY created_at DESC
+ORDER BY id ASC
 `
 
 func (q *Queries) GetAllRandoms(ctx context.Context) ([]Random, error) {
@@ -104,7 +104,7 @@ const getRandomsByUser = `-- name: GetRandomsByUser :many
 SELECT id, random_val, user_id, created_at, updated_at
 FROM random
 WHERE user_id = $1
-ORDER BY created_at DESC
+ORDER BY id ASC
 `
 
 func (q *Queries) GetRandomsByUser(ctx context.Context, userID string) ([]Random, error) {
