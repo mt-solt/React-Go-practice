@@ -3,6 +3,7 @@ package random
 import (
 	"context"
 
+	"react-go-practice/db"
 	"react-go-practice/models"
 )
 
@@ -14,4 +15,5 @@ type RandomRepository interface {
 	Delete(ctx context.Context, uuid string) error
 	GetAll(ctx context.Context) ([]models.Random, error)
 	QueryByUser(ctx context.Context, userId string) ([]models.Random, error)
+	GetQuerier() db.Querier
 }

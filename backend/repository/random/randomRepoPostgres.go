@@ -178,3 +178,7 @@ func (r *postgresRepo) QueryByUser(ctx context.Context, userId string) ([]models
 
 	return result, nil
 }
+
+func (r *postgresRepo) GetQuerier() db.Querier {
+	return r.queries
+}

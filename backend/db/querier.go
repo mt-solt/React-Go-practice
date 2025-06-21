@@ -12,11 +12,17 @@ import (
 
 type Querier interface {
 	CreateRandom(ctx context.Context, arg CreateRandomParams) error
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteRandom(ctx context.Context, id uuid.UUID) error
+	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetAllRandoms(ctx context.Context) ([]Random, error)
 	GetRandom(ctx context.Context, id uuid.UUID) (Random, error)
 	GetRandomsByUser(ctx context.Context, userID string) ([]Random, error)
+	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
+	GetUserByUsername(ctx context.Context, username string) (User, error)
+	ListUsers(ctx context.Context) ([]User, error)
 	UpdateRandom(ctx context.Context, arg UpdateRandomParams) error
+	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

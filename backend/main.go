@@ -4,20 +4,32 @@ import (
 	"log"
 	"react-go-practice/api/handler"
 	randomRepo "react-go-practice/repository/random"
+	userRepo "react-go-practice/repository/user"
+	userService "react-go-practice/services/user"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	f := randomRepo.New()
-	repo := f.Create()
+	// ランダムリポジトリの初期化
+	randomRepoFactory := randomRepo.New()
+	randomRepo := randomRepoFactory.Create()
 
 	// リポジトリの初期化（データベース接続）
-	if err := repo.Init(); err != nil {
+	if err := randomRepo.Init(); err != nil {
 		log.Fatalf("Failed to initialize repository: %v", err)
 	}
 
-	randomHandler := handler.NewRandomHandler(repo)
+	// ユーザーリポジトリの初期化
+	userRepoFactory := userRepo.New(randomRepo.GetQuerier())
+	userRepository := userRepoFactory.Create()
+
+	// ユーザーサービスの初期化
+	userServiceInstance := userService.NewUserService(userRepository)
+
+	// ハンドラーの初期化
+	randomHandler := handler.NewRandomHandler(randomRepo)
+	userHandler := handler.NewUserHandler(userServiceInstance)
 
 	r := gin.Default()
 
@@ -39,12 +51,25 @@ func main() {
 			"message": "pong",
 		})
 	})
+
+	// ランダム関連のルート
 	r.GET("/api/random", randomHandler.GetRandom)
-	// 例: GET http://localhost:8080/api/random/user?userId=123
 	r.GET("/api/random/user", randomHandler.GetRandomByUser)
 	r.POST("/api/create_random", randomHandler.CreateRundom)
 	r.POST("/api/update_random", randomHandler.UpdateRandom)
 	r.POST("/api/delete_random", randomHandler.DeleteRandom)
+
+	// ユーザー関連のルート
+	userRoutes := r.Group("/api/users")
+	{
+		userRoutes.POST("/register", userHandler.Register)
+		userRoutes.POST("/login", userHandler.Login)
+		userRoutes.GET("/", userHandler.ListUsers)
+		userRoutes.GET("/:id", userHandler.GetUserByID)
+		userRoutes.GET("/username/:username", userHandler.GetUserByUsername)
+		userRoutes.PUT("/:id/password", userHandler.ChangePassword)
+		userRoutes.DELETE("/:id", userHandler.DeleteUser)
+	}
 
 	// 8080ポートで起動
 	r.Run(":8080")
