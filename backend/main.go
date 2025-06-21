@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"react-go-practice/api/handler"
 	randomRepo "react-go-practice/repository/random"
 
@@ -10,6 +11,12 @@ import (
 func main() {
 	f := randomRepo.New()
 	repo := f.Create()
+
+	// リポジトリの初期化（データベース接続）
+	if err := repo.Init(); err != nil {
+		log.Fatalf("Failed to initialize repository: %v", err)
+	}
+
 	randomHandler := handler.NewRandomHandler(repo)
 
 	r := gin.Default()
